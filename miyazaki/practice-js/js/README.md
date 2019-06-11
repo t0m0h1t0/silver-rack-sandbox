@@ -1,11 +1,11 @@
-# js
+# javascript
 This directory is for practice ``javascript``.
 
 ## memorandum
 
 ### global function
 
-#### parseInt
+#### ``parseInt``
 
 convert str into int.
 ```
@@ -21,7 +21,7 @@ parseInt("11", 8)    // -> 9
 parseInt("11", 10)   // -> 11
 ```
 
-#### parseFlot
+#### ``parseFlot``
 
 convert str into number.
 ```
@@ -47,7 +47,7 @@ Number.MAX_VALUE         // 表現可能な最大の値
 Number.MIN_VALU          // 表現可能な最小の値
 ```
 
-#### toFixed
+#### ``toFixed``
 convert the object of Number Class into number, specifing a number of decimal places.
 
 ```
