@@ -1,5 +1,5 @@
 # practice--js
-This repository is for practice of ``js``.
+This directory is for practice of ``js``.
 
 ## How to install nodebrew
 
