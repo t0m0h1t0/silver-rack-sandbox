@@ -35,3 +35,39 @@ parseFloat("2.4e-3")   // -> 0.0024
 parseFloat("book170")  // -> NAN
 ```
 
+### Number class
+
+#### The property of Number constructor function
+
+```
+Number.NaN               // 非数
+Number.POSITIVE_INFINITY // 正の無限大
+Number.NEGATIVE_INFINITY // 負の無限大
+Number.MAX_VALUE         // 表現可能な最大の値
+Number.MIN_VALU          // 表現可能な最小の値
+```
+
+#### toFixed
+convert the object of Number Class into number, specifing a number of decimal places.
+
+```
+toFixed(int)
+
+var num_obj = new Number(15.784);
+
+var str1    = num_obj.toFixed(0); // 16
+var str2    = num_obj.toFixed(2); // 15.78
+var str3    = num_obj.toFixed(4); // 15.7840
+```
+
+#### toPrecision
+convert the object of Number Class into number, specifing a significant figure.
+
+```
+var num_obj = new Number(176.54);
+
+var str1    = num_obj.toExponential(1); // 2e+2
+var str2    = num_obj.toExponential(4); // 176.5
+var str3    = num_obj.toExponential(7); // 176.5400
+```
+
