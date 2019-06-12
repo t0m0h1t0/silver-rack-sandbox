@@ -79,3 +79,11 @@ get the text input by user.
 ```
 rsl = propmt('showed text', 'init text');
 ```
+
+### DOM (Document Object Model)
+DOM is the API for taking in HTML or XML.
+
+#### getElementByTagName
+Returns a NodeList of all the Elements with a given tag name in the
+order in which they would be encountered in a preorder traversal of
+the Document tree.
