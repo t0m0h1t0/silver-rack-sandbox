@@ -71,3 +71,11 @@ var str2    = num_obj.toExponential(4); // 176.5
 var str3    = num_obj.toExponential(7); // 176.5400
 ```
 
+### dialog
+
+#### prompt
+get the text input by user.
+
+```
+rsl = propmt('showed text', 'init text');
+```
