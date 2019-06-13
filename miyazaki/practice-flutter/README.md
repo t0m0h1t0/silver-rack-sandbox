@@ -139,11 +139,21 @@ This directory is for practice of flutter.
 
 11. Operation Check
 
+    - android device
+
     ```
     $ ~/Library/Android/sdk/tools/emulator -list-avds
     Pixel_3_API_25
     $ ~/Library/Android/sdk/tools/emulator @Pixel_3_API_25
     ```
+
+    - iOS device
+    ```
+    $ open -a Simulator
+    ```
+
+    We can choose the series of iPhone.
+    ``Hardware > Device`` on menu bar of xCode.
 
 12. Success!
 
