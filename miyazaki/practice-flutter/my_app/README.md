@@ -36,6 +36,24 @@ $ flutter run
 
 ## Tips
 
+### Get packages
+
+1. Update ``pubspec.yaml`` by adding packages you want to import, as shown below:
+```
+dependencies:
+    flutter:
+      sdk: flutter
+
+    cupertino_icons: ^0.1.2
+    english_words: ^3.1.0       // Add this line.
+```
+
+2. By typing the following in the command line, you can add packages.
+```
+$ flutter packages get
+```
+
+
 ### Syntax highlight dart for vim
 
 1. Add following in ``.vimrc``
@@ -46,3 +64,45 @@ au BufNewFile,BufRead *.dart :set filetype=dart
 ```
 
 Notice whether you have installed NeoBundle which is the plugin for vim or not.
+
+## Visible widget
+
+Scaffold widget provides default app bar and the property which keeps widget tree for home screen.
+Create a Scaffold widget:
+```
+Scaffold(
+    appBar: AppBar(
+        title; Text('hoge'),
+    ),
+    body; Center(
+        child: Text('hoge'),
+    ),
+)
+```
+
+Create a Text widget:
+```
+Text('Hello World'),
+```
+
+Create an Image widget:
+```
+Image.asset(
+    'images/hoge.png',
+    fit: BoxFit.cover,
+),
+```
+
+Create an Icon widget:
+```
+Icon(
+    Icons.star,
+    color: Colors.red[500],
+),
+```
+
+
+## Term list
+
+- Container
+    - Container is a widget class that allows you to customize its child widget. Use a Container when you want to add padding, margins, borders, or background color, to name some of its capabilities.
