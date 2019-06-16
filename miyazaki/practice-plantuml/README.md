@@ -36,7 +36,4 @@ $ java -jar "path of plantuml.jar" "path of sample.txt"
 $ open image/sample.png
 ```
 
-![]("https://github.com/tsutarou10/silver-rack-sandbox/blob/feature/practice-plantuml/miyazaki/practice-plantuml/imges/sample.png")
-
-
-
+![sample](https://github.com/tsutarou10/silver-rack-sandbox/blob/feature/practice-plantuml/miyazaki/practice-plantuml/images/sample.png)

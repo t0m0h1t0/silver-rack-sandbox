@@ -1,0 +1,4 @@
+@startuml images/sample.png
+Foo -> Bar : メッセージ
+Foo <-- Bar
+@enduml
