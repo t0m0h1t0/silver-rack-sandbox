@@ -35,7 +35,6 @@ class _Home extends State<Home> {
     String tab4      = 'Account';
     String tab5      = 'Chat';
 
-
     @override
     void initState() {
         super.initState();
@@ -58,9 +57,11 @@ class _Home extends State<Home> {
     }
 
     void onPageChanged(int page) {
-        setState((){
-            this._page = page;
-        });
+        if(this.mounted){
+            setState((){
+                this._page = page;
+            });
+        }
     }
 
     // 画面全体のビルド
@@ -69,6 +70,24 @@ class _Home extends State<Home> {
         return Scaffold(
             appBar: AppBar(
                 title: Text('雀士マッチングアプリ'),
+                actions: [
+                    IconButton(
+                        icon: Icon(Icons.account_circle),
+                        onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => AccountPage(),
+                                ),
+                            );
+                            /*
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => AccountPage()),
+                            );
+                            */
+                        },
+                    ),
+                ],
                 backgroundColor: Colors.green,
             ),
             body: PageView(
@@ -135,9 +154,11 @@ class TabItemChild extends StatefulWidget {
 }
 
 class _TabItemChild extends State<TabItemChild> {
-    final _mainReference = FirebaseDatabase.instance.reference().child("message");
+    final _mainReference = FirebaseDatabase.instance.reference().child("gmail");
     String message;
     List entries = new List();
+    int cnt = 0;
+    List aa = ['gmail : ', 'user name : ', 'age : '];
 
     @override
     initState() {
@@ -146,10 +167,25 @@ class _TabItemChild extends State<TabItemChild> {
     }
 
     _onEntryAdded(Event e) {
-        setState(() {
-            entries.add(e.snapshot.value["text"]);
-        });
+        if(this.mounted){
+            setState(() {
+                if(e.snapshot.key == 'gmail_address') {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value + "@gmail.com");
+                } else if(e.snapshot.key == 'sex') {
+                    if(e.snapshot.value == '1') {
+                        entries.add(e.snapshot.key + ' : ' + 'man');
+                    } else if(e.snapshot.value == '2'){
+                        entries.add(e.snapshot.key + ' : ' + 'woman');
+                    } else {
+                        entries.add(e.snapshot.key + ' : ' + 'else');
+                    }
+                } else {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value);
+                }
+            });
+        }
     }
+
 
     @override
     Widget build(BuildContext context){
@@ -202,7 +238,7 @@ class _AccountPage extends State<AccountPage> {
 
     final title = 'Account';
 
-    String _type = '';
+    String _type = '1';
     String _sex  = '0';
     int count    = 0;
 
@@ -210,6 +246,7 @@ class _AccountPage extends State<AccountPage> {
     final userAgeInputController    = TextEditingController();
     final userLineIdInputController = TextEditingController();
     final userGmailInputController  = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
     void _handleRadio(String e) => setState(()
             //ラジオボタンを操作するときに使う
@@ -226,10 +263,15 @@ class _AccountPage extends State<AccountPage> {
 
         FirebaseDatabase.instance.reference().child("gmail").set(
                 {
-                    user_gmail: user_name
+                    'gmail_address' : user_gmail,
+                    'user_name' : user_name,
+                    'age': user_age,
+                    'sex': _sex,
+                    'line_id': user_lineid,
                 }
         );
 
+        /*
         FirebaseDatabase.instance.reference().child(user_gmail).set(
                 {
                     "age": user_age,
@@ -244,6 +286,7 @@ class _AccountPage extends State<AccountPage> {
                     }
                 }
         );
+        */
 
         //userNameInputController.clear(); // 送信した後テキストフォームの文字をクリア
         print('finish register.');
@@ -251,65 +294,126 @@ class _AccountPage extends State<AccountPage> {
 
     @override
     Widget build(BuildContext context) {
-        return Container(
-            child: Column(
-                children: [
-                    TextFormField(
-                        controller: userGmailInputController,
-                        decoration: InputDecoration(
-                            labelText: 'Enter your gmail address',
-                        ),
-                    ),
-                    TextFormField(
-                        controller: userNameInputController,
-                        decoration: InputDecoration(
-                            labelText: 'Enter your username',
-                        ),
-                    ),
-                    TextFormField(
-                        controller: userAgeInputController,
-                        decoration: InputDecoration(
-                            labelText: 'Enter your age',
-                        ),
-                    ),
-                    Row (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Scaffold(
+            appBar: AppBar(
+                title: Text('Account'),
+                backgroundColor: Colors.green,
+            ),
+            body: Form (
+                key: _formKey,
+                child: Container(
+                    child: Column(
                         children: [
-                            Expanded(
-                                child: RadioListTile(
-                                    activeColor: Colors.blue,
-                                    controlAffinity: ListTileControlAffinity.trailing,
-                                    title: Text('male'),
-                                    value: '1',
-                                    groupValue: _type,
-                                    onChanged: _handleRadio,
+                            TextFormField(
+                                controller: userGmailInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your gmail address',
+                                ),
+                                validator: (value) {
+                                    return value.isEmpty ? 'You must enter your gmail address.': null;
+                                },
+                            ),
+                            TextFormField(
+                                controller: userNameInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your username',
+                                ),
+                                validator: (value) {
+                                    return value.isEmpty ? 'You must enter your gmail address.': null;
+                                },
+                            ),
+                            TextFormField(
+                                controller: userAgeInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your age',
+                                ),
+                                validator: (value) {
+                                    if (value.isEmpty) {
+                                        return 'Please enter your username';
+                                    }
+                                    return null;
+                                },
+                            ),
+                            Row (
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('male'),
+                                            value: '1',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('female'),
+                                            value: '2',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('else'),
+                                            value: '3',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                            TextFormField(
+                                controller: userLineIdInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter line ID',
                                 ),
                             ),
-                            Expanded(
-                                child: RadioListTile(
-                                    activeColor: Colors.blue,
-                                    controlAffinity: ListTileControlAffinity.trailing,
-                                    title: Text('female'),
-                                    value: '2',
-                                    groupValue: _type,
-                                    onChanged: _handleRadio,
-                                ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                    Expanded(
+                                        child: IconButton(
+                                            icon: Icon(Icons.keyboard_return),
+                                            onPressed:() {
+                                                Navigator.of(context).pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) => Home(),
+                                                    ),
+                                                );
+                                            }
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: IconButton(
+                                            icon: Icon(Icons.send),
+                                            onPressed:(){
+                                                if(_formKey.currentState.validate()) {
+                                                    this._formKey.currentState.save();
+                                                    //Scaffold.of(context)
+                                                    //    .showSnackBar(SnackBar(content: Text('Processing Data')));
+                                                    submit();
+                                                    //Navigator.of(context).pop(true);
+                                                    Navigator.of(context).pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) => Home(),
+                                                        ),
+                                                    );
+                                                }
+                                            },
+                                        ),
+                                    ),
+                                ],
                             ),
                         ],
                     ),
-                    TextFormField(
-                        controller: userLineIdInputController,
-                        decoration: InputDecoration(
-                            labelText: 'Enter line ID',
-                        ),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed:(){
-                            submit();
-                        },
-                    )
-                ],
+                ),
             ),
         );
     }
