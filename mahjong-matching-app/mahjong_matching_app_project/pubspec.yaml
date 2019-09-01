@@ -1,6 +1,5 @@
 name: mahjong_matching_app_project
-description: A new Flutter project.
-
+description: A majong matching app.
 version: 1.0.0+1
 
 environment:
@@ -11,12 +10,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
+  firebase_database: 1.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter:
 
+flutter:
   uses-material-design: true
 
