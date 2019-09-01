@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,105 +10,374 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Majong Matching App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Home(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class Home extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _Home createState() => new _Home();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _Home extends State<Home> {
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+    PageController _pageController;
+    int currentIndex       = 0;
+    int _page              = 0;
+    String tab_home        = 'HOME';
+    String tab_search      = 'Search';
+    String tab_recruitment = 'Recruitment';
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    @override
+    void initState() {
+        super.initState();
+        _pageController = new PageController();
+    }
+
+    @override
+    void dispose() {
+        super.dispose();
+        _pageController.dispose();
+    }
+
+    void onTabTapped(int index) {
+        currentIndex = index;
+        _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 1),
+            curve: Curves.ease
+        );
+    }
+
+    void onPageChanged(int page) {
+        if(this.mounted){
+            setState((){
+                this._page = page;
+            });
+        }
+    }
+
+    // 画面全体のビルド
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+            appBar: AppBar(
+                title: Text('雀士マッチングアプリ'),
+                actions: [
+                    IconButton(
+                        icon: Icon(Icons.account_circle),
+                        onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => AccountPage(),
+                                ),
+                            );
+                        },
+                    ),
+                ],
+                backgroundColor: Colors.green,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+
+            body: PageView(
+                controller: _pageController,
+                onPageChanged: onPageChanged,
+                children: [
+                    // 各々が作った画面をここに書く
+                    TabItem(tab_home),
+                    TabItem(tab_search),
+                    TabItem(tab_recruitment),
+                ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+            bottomNavigationBar: BottomNavigationBar(
+                onTap: onTabTapped,
+                currentIndex: currentIndex,
+                items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        title: Text(tab_home),
+                    ),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.search),
+                        title: Text(tab_search),
+                    ),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.chat),
+                        title: Text(tab_recruitment),
+                    ),
+                ],
+                type: BottomNavigationBarType.fixed, // 4つ以上BottomNavigationBarを使うときには必要らしい
+            ),
+        );
+    }
 }
+
+class TabItem extends StatelessWidget {
+    final title;
+
+    const TabItem(this.title): super();
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+            body: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: TabItemChild(),
+            ),
+        );
+    }
+}
+
+class TabItemChild extends StatefulWidget {
+    @override
+    _TabItemChild createState() => new _TabItemChild();
+}
+
+class _TabItemChild extends State<TabItemChild> {
+    final _mainReference = FirebaseDatabase.instance.reference().child("gmail");
+    String message;
+    List entries = new List();
+    int cnt = 0;
+    List aa = ['gmail : ', 'user name : ', 'age : '];
+
+    @override
+    initState() {
+        super.initState();
+        _mainReference.onChildAdded.listen(_onEntryAdded);
+    }
+
+    _onEntryAdded(Event e) {
+        if(this.mounted){
+            setState(() {
+                if(e.snapshot.key == 'gmail_address') {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value + "@gmail.com");
+                } else if(e.snapshot.key == 'sex') {
+                    if(e.snapshot.value == '1') {
+                        entries.add(e.snapshot.key + ' : ' + 'man');
+                    } else if(e.snapshot.value == '2'){
+                        entries.add(e.snapshot.key + ' : ' + 'woman');
+                    } else {
+                        entries.add(e.snapshot.key + ' : ' + 'else');
+                    }
+                } else {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value);
+                }
+            });
+        }
+    }
+
+    @override
+    Widget build(BuildContext context){
+        //_mainReference.onChildAdded.listen(_onEntryAdded);
+        return ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+                return _buildRow(index);
+            },
+            itemCount: entries.length,
+        );
+    }
+
+    Widget _buildRow(int index) {
+        return Card(
+            child: ListTile(
+                title: Text(entries[index]),
+            ),
+        );
+    }
+}
+
+class AccountPage extends StatefulWidget {
+    @override
+    _AccountPage createState() => new _AccountPage();
+}
+
+class _AccountPage extends State<AccountPage> {
+
+    final title = 'Account';
+
+    String _type = '1';
+    String _sex  = '0';
+    int count    = 0;
+
+    final userNameInputController   = TextEditingController();
+    final userAgeInputController    = TextEditingController();
+    final userLineIdInputController = TextEditingController();
+    final userGmailInputController  = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    void _handleRadio(String e) => setState(()
+            //ラジオボタンを操作するときに使う
+            {
+                _type = e;
+                _sex  = e;
+            });
+
+    void submit() {
+        var user_name   = userNameInputController.text;
+        var user_age    = userAgeInputController.text;
+        var user_lineid = userLineIdInputController.text;
+        var user_gmail  = userGmailInputController.text.replaceAll(RegExp(r'@[A-Za-z]+.[A-Za-z]+'), ''); // .をfirst keyに使えないから@以下を消している
+
+        FirebaseDatabase.instance.reference().child("gmail").set(
+                {
+                    'gmail_address' : user_gmail,
+                    'user_name' : user_name,
+                    'age': user_age,
+                    'sex': _sex,
+                    'line_id': user_lineid,
+                }
+        );
+
+        /*
+        FirebaseDatabase.instance.reference().child(user_gmail).set(
+                {
+                    "age": user_age,
+                    "sex": user_age,
+                    "evaluation": "4",
+                    "lineid": user_lineid,
+                    "messages" : {
+                        "foo" : {
+                            "3419-3419-01" : "hello",
+                            "213-32139-01" : "goodbye"
+                        }
+                    }
+                }
+        );
+        */
+
+        //userNameInputController.clear(); // 送信した後テキストフォームの文字をクリア
+        print('finish register.');
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+            appBar: AppBar(
+                title: Text('Account'),
+                backgroundColor: Colors.green,
+            ),
+            body: Form (
+                key: _formKey,
+                child: Container(
+                    child: Column(
+                        children: [
+                            TextFormField(
+                                controller: userGmailInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your gmail address',
+                                ),
+                                validator: (value) {
+                                    return value.isEmpty ? 'You must enter your gmail address.': null;
+                                },
+                            ),
+                            TextFormField(
+                                controller: userNameInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your username',
+                                ),
+                                validator: (value) {
+                                    return value.isEmpty ? 'You must enter your gmail address.': null;
+                                },
+                            ),
+                            TextFormField(
+                                controller: userAgeInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter your age',
+                                ),
+                                validator: (value) {
+                                    if (value.isEmpty) {
+                                        return 'Please enter your username';
+                                    }
+                                    return null;
+                                },
+                            ),
+                            Row (
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('male'),
+                                            value: '1',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('female'),
+                                            value: '2',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: RadioListTile(
+                                            activeColor: Colors.blue,
+                                            controlAffinity: ListTileControlAffinity.trailing,
+                                            title: Text('else'),
+                                            value: '3',
+                                            groupValue: _type,
+                                            onChanged: _handleRadio,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                            TextFormField(
+                                controller: userLineIdInputController,
+                                decoration: InputDecoration(
+                                    labelText: 'Enter line ID',
+                                ),
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                    Expanded(
+                                        child: IconButton(
+                                            icon: Icon(Icons.keyboard_return),
+                                            onPressed:() {
+                                                Navigator.of(context).pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) => Home(),
+                                                    ),
+                                                );
+                                            }
+                                        ),
+                                    ),
+                                    Expanded(
+                                        child: IconButton(
+                                            icon: Icon(Icons.send),
+                                            onPressed:(){
+                                                if(_formKey.currentState.validate()) {
+                                                    this._formKey.currentState.save();
+                                                    //Scaffold.of(context)
+                                                    //    .showSnackBar(SnackBar(content: Text('Processing Data')));
+                                                    submit();
+                                                    //Navigator.of(context).pop(true);
+                                                    Navigator.of(context).pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) => Home(),
+                                                        ),
+                                                    );
+                                                }
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ),
+            ),
+        );
+    }
+}
+
