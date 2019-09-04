@@ -5,5 +5,6 @@
 | Direcotry name | Description |
 | ---- | ---- |
 | miyazaki | practice directory for Miyazaki |
+| yamauchi | practice directory for Yamauchi |
 | shared-dir | shared directory |
 
