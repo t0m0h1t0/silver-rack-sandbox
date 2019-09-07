@@ -26,7 +26,6 @@ class HomeChild extends StatefulWidget {
 }
 
 class _HomeChild extends State<HomeChild> {
-    //final _mainReference = FirebaseDatabase.instance.reference().child("gmail").child(this.config.user_gmail_address);
     String message;
     List entries = new List();
     int cnt = 0;
@@ -87,17 +86,55 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPage extends State<AccountPage> {
 
+    List entries = new List();
     final title = 'Account';
 
     String _type = '1';
     String _sex  = '0';
     int count    = 0;
 
-    final userNameInputController   = TextEditingController();
-    final userAgeInputController    = TextEditingController();
-    final userLineIdInputController = TextEditingController();
-    final userGmailInputController  = TextEditingController();
+    TextEditingController userNameInputController;
+    TextEditingController userAgeInputController;
+    TextEditingController userLineIdInputController;
+    TextEditingController userGmailInputController;
     final _formKey = GlobalKey<FormState>();
+
+    @override
+    initState() {
+        var _mainReference = FirebaseDatabase.instance.reference().child("gmail").child(widget.user_gmail_address);
+        super.initState();
+        _mainReference.onChildAdded.listen(_onEntryAdded);
+    }
+
+    setDefaultValue() { // TextFormFieldの初期値をfirebaseから取得して代入
+        userNameInputController = new TextEditingController(text: entries[3].split(':')[1]);
+        userAgeInputController = new TextEditingController(text: entries[0].split(':')[1]);
+        userLineIdInputController = new TextEditingController(text: entries[1].split(':')[1]);
+        userGmailInputController = new TextEditingController(text: 'gmail');
+    }
+
+
+
+    @override
+    _onEntryAdded(Event e) {
+        if(this.mounted){
+            setState(() {
+                if(e.snapshot.key == 'gmail_address') {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value + "@gmail.com");
+                } else if(e.snapshot.key == 'sex') {
+                    if(e.snapshot.value == '1') {
+                        entries.add(e.snapshot.key + ' : ' + 'man');
+                    } else if(e.snapshot.value == '2'){
+                        entries.add(e.snapshot.key + ' : ' + 'woman');
+                    } else {
+                        entries.add(e.snapshot.key + ' : ' + 'else');
+                    }
+                } else {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value);
+                }
+            });
+        }
+    }
 
     void _handleRadio(String e) => setState(()
             //ラジオボタンを操作するときに使う
@@ -126,6 +163,7 @@ class _AccountPage extends State<AccountPage> {
 
     @override
     Widget build(BuildContext context) {
+        setDefultValue();
         return Scaffold(
             appBar: AppBar(
                 title: Text('Account'),
@@ -147,6 +185,7 @@ class _AccountPage extends State<AccountPage> {
                             ),
                             TextFormField(
                                 controller: userAgeInputController,
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     labelText: 'Enter your age',
                                 ),
