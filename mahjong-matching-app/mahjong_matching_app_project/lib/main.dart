@@ -36,11 +36,14 @@ class _Main extends State<Main> {
     String tab_home        = 'HOME';
     String tab_search      = 'Search';
     String tab_recruitment = 'Recruitment';
+    List entries = new List();
 
     @override
     void initState() {
         super.initState();
         _pageController = new PageController();
+        var _mainReference = FirebaseDatabase.instance.reference().child("gmail").child(widget.user_gmail_address);
+        _mainReference.onChildAdded.listen(_onEntryAdded);
     }
 
     @override
@@ -66,9 +69,31 @@ class _Main extends State<Main> {
         }
     }
 
+    @override
+    _onEntryAdded(Event e) {
+        if(this.mounted){
+            setState(() {
+                if(e.snapshot.key == 'gmail_address') {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value + "@gmail.com");
+                } else if(e.snapshot.key == 'sex') {
+                    if(e.snapshot.value == '1') {
+                        entries.add(e.snapshot.key + ' : ' + 'man');
+                    } else if(e.snapshot.value == '2'){
+                        entries.add(e.snapshot.key + ' : ' + 'woman');
+                    } else {
+                        entries.add(e.snapshot.key + ' : ' + 'else');
+                    }
+                } else {
+                    entries.add(e.snapshot.key + ' : ' + e.snapshot.value);
+                }
+            });
+        }
+    }
+
     // 画面全体のビルド
     @override
     Widget build(BuildContext context) {
+        debugPrint("$entries");
         return Scaffold(
             appBar: AppBar(
                 title: Text('雀士マッチングアプリ'),
@@ -78,7 +103,7 @@ class _Main extends State<Main> {
                         onPressed: () {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                    builder: (context) => AccountPage(widget.user_gmail_address),
+                                    builder: (context) => AccountPage(widget.user_gmail_address, entries),
                                 ),
                             );
                         },
