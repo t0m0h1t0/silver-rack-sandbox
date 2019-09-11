@@ -84,6 +84,10 @@ class AccountPage extends StatefulWidget {
     @override
     _AccountPage createState() => new _AccountPage();
 }
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
 
 class _AccountPage extends State<AccountPage> {
 
@@ -182,6 +186,7 @@ class _AccountPage extends State<AccountPage> {
         }
     }
 
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -194,15 +199,24 @@ class _AccountPage extends State<AccountPage> {
                 child: Container(
                     child: Column(
                         children: [
-                            TextFormField(
-                                focusNode: _focusNode,
-                                controller: userNameInputController,
-                                decoration: InputDecoration(
-                                    labelText: 'Enter your username',
-                                ),
-                                validator: (value) {
-                                    return value.isEmpty ? 'You must enter your gmail address.': null;
+                            GestureDetector(
+                                onTap: (){
+                                    print('hoge');
                                 },
+                                child: AbsorbPointer(
+                                   child:
+                                       TextFormField(
+                                           //enableInteractiveSelection: false,
+                                           //focusNode: AlwaysDisabledFocusNode(),
+                                           controller: userNameInputController,
+                                           decoration: InputDecoration(
+                                                   labelText: 'Enter your username',
+                                           ),
+                                           validator: (value) {
+                                               return value.isEmpty ? 'You must enter your gmail address.': null;
+                                           },
+                                       ),
+                               ),
                             ),
                             TextFormField(
                                 controller: userAgeInputController,
