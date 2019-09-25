@@ -61,14 +61,39 @@ class _HomeChild extends State<HomeChild> {
     @override
     Widget build(BuildContext context){
         return ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-                return _buildRow(index);
-            },
-            itemCount: entries.length,
-        );
+                itemBuilder: (BuildContext context, int index) {
+                    return _buildRow(index);
+                },
+                itemCount: entries.length,
+            );
     }
 
     Widget _buildRow(int index) {
+        if(index == 0) {
+            return Card(
+                child: Column(
+                    children: [
+                        Container(
+                            width: 110.0,
+                            height: 110.0,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage('images/profile_icon.jpg'),
+                                )
+                            ),
+                        ),
+                        Divider(
+                            color: Colors.black,
+                        ),
+                        ListTile(
+                            title: Text(entries[index]),
+                        ),
+                    ],
+                ),
+            );
+        }
         return Card(
             child: ListTile(
                 title: Text(entries[index]),
