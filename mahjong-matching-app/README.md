@@ -1,3 +1,3 @@
 # mahjong-matching-app
-This directory is for majong matting app.
 
+This directory is for majong matching app.
