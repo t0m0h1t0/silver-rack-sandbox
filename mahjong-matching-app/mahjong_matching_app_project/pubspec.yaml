@@ -8,9 +8,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_datetime_picker: ^1.2.1
+  intl: ^0.15.8
+  http: ^0.12.0+2
   cupertino_icons: ^0.1.2
   firebase_database: 1.0.3
+  flutter_cupertino_data_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:
