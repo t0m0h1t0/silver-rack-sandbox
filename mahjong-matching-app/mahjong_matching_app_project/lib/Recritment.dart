@@ -15,12 +15,17 @@ import 'package:flutter_cupertino_data_picker/flutter_cupertino_data_picker.dart
 ----------------------------------------------*/
 class RecruitmentPage extends StatefulWidget {
   // アロー関数を用いて、Stateを呼ぶ
+  String mode;
+  RecruitmentPage(this.mode);
   @override
-  RecruitmentPageState createState() => new RecruitmentPageState();
+  RecruitmentPageState createState() => new RecruitmentPageState(mode);
 }
 class RecruitmentPageState extends State<RecruitmentPage> {
-
+  PageParts set = new PageParts();
+  String mode;
+  RecruitmentPageState(this.mode);
   //送信用変数
+
   String _selectPref = null;
   String _selectLine = null;
   String _selectStation = null;
@@ -57,14 +62,16 @@ class RecruitmentPageState extends State<RecruitmentPage> {
   }
 
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Container(
-        padding: const EdgeInsets.all(40.0),
-        child: SingleChildScrollView(
-            child: Column(
+    return Scaffold(
+      backgroundColor:set.backGroundColor,
+      body:Form(
+        key: _formKey,
+        child: Container(
+            padding: const EdgeInsets.all(40.0),
+            child: SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
-                  Text('募集条件を入力してください'),
+                  Text('募集条件を入力してください', style: TextStyle(color:set.fontColor)),
                   _recruitMemberPicker(), //募集人数プルダウン
                   _prefPicker(), //都道府県Picker
                   _linePicker(), //路線Picker
@@ -72,13 +79,22 @@ class RecruitmentPageState extends State<RecruitmentPage> {
                   _startTimePicker(), //開始日時プルダウン
                   _endTimePicker(), //終了日時プルダウン
                   _remarksField(),
-                  RaisedButton(
-                    onPressed: _submission,
-                    child: Text('募集する'),
-                  )
+                  Padding(
+                      padding:EdgeInsets.only(top: 20.0),
+                      child:RaisedButton.icon(
+                        label: Text("募集する"),
+                        color: Colors.white,
+                        icon: Icon(
+                          Icons.event_available,
+                          color: set.fontColor,
+                        ),
+                        onPressed: _submission,
+                      )
+                  ),
                 ]
             )
         ),
+      ),
       ),
     );
   }
@@ -167,12 +183,18 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
           controller: _memberController,
           decoration: InputDecoration(
-            icon: Icon(Icons.people),
+            icon: Icon(Icons.people,
+              color: set.fontColor,
+            ),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
             hintText: 'Choose a number of recruiting member',
+            hintStyle: TextStyle(color:set.fontColor),
             labelText: '*募集人数',
+            labelStyle: TextStyle(color:set.fontColor),
           ),
           validator: (String value) {
             return value.isEmpty ? '必須項目です' : null;
@@ -203,6 +225,7 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
           validator: (String value) {
             if(value.isEmpty){
@@ -215,9 +238,15 @@ class RecruitmentPageState extends State<RecruitmentPage> {
           },
           controller: _prefController,
           decoration: InputDecoration(
-            icon: Icon(Icons.place),
+            icon: Icon(
+              Icons.place,
+              color: set.fontColor,
+            ),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
             hintText: 'Choose a prefecture',
             labelText: '*都道府県',
+            labelStyle: TextStyle(color:set.fontColor),
+            fillColor: Colors.white,
           ),
         ),
       ),
@@ -244,12 +273,19 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
+          cursorColor: Colors.pink,
           controller: _lineController,
           decoration: InputDecoration(
-            icon: Icon(Icons.train),
+            icon: Icon(
+                Icons.train,
+                color: set.fontColor,
+            ),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
             hintText: 'Choose a line',
             labelText: '*路線',
+            labelStyle: TextStyle(color:set.fontColor),
           ),
           validator: (String value) {
             if (value.isEmpty) {
@@ -285,12 +321,18 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
           controller: _stationController,
           decoration: InputDecoration(
-            icon: Icon(Icons.subway),
+            icon: Icon(
+                Icons.subway,
+                color: set.fontColor,
+            ),
             hintText: 'Choose a station',
             labelText: '*駅',
+            labelStyle: TextStyle(color:set.fontColor),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
           ),
           validator: (String value) {
             if (value.isEmpty) {
@@ -305,7 +347,6 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       ),
     );
   }
-
   Widget _startTimePicker() {
     return new GestureDetector(
       onTap: () {
@@ -313,11 +354,9 @@ class RecruitmentPageState extends State<RecruitmentPage> {
             context,
             showTitleActions: true,
             theme: DatePickerTheme(
-                backgroundColor: Colors.white,
-                itemStyle: TextStyle(
-                    color: Colors.black),
-                doneStyle:
-                TextStyle(color: Colors.black)),
+                backgroundColor: Colors.black,
+                itemStyle: TextStyle(color: Colors.white),
+                doneStyle: TextStyle(color: Colors.white)),
             onChanged: (date) {},
             onConfirm: (date) {
               setState(() {
@@ -331,12 +370,18 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
           controller: _startingController,
           decoration: InputDecoration(
-            icon: Icon(Icons.calendar_today ),
+            icon: Icon(
+                Icons.calendar_today,
+                color:set.fontColor,
+            ),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
             hintText: 'Choose a starting Time',
             labelText: '*開始日時',
+            labelStyle: TextStyle(color:set.fontColor),
           ),
           validator: (String value) {
             return value.isEmpty ? '開始時間が未選択です' : null;
@@ -345,7 +390,6 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       ),
     );
   }
-
   Widget _endTimePicker() {
     return new GestureDetector(
       onTap: () {
@@ -353,11 +397,9 @@ class RecruitmentPageState extends State<RecruitmentPage> {
             context,
             showTitleActions: true,
             theme: DatePickerTheme(
-                backgroundColor: Colors.white,
-                itemStyle: TextStyle(
-                    color: Colors.black),
-                doneStyle:
-                TextStyle(color: Colors.black)),
+                backgroundColor: Colors.black,
+                itemStyle: TextStyle(color: Colors.white),
+                doneStyle: TextStyle(color: Colors.white)),
             onChanged: (date) {},
             onConfirm: (date) {
               setState(() {
@@ -371,12 +413,18 @@ class RecruitmentPageState extends State<RecruitmentPage> {
       },
       child: AbsorbPointer(
         child: new TextFormField(
+          style:TextStyle(color:Colors.white),
           enableInteractiveSelection: false,
           controller: _endingController,
           decoration: InputDecoration(
-            icon: Icon(Icons.calendar_today),
+            icon: Icon(
+                Icons.calendar_today,
+                color: set.fontColor,
+            ),
+            enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
             hintText: 'Choose a station',
             labelText: '*終了日時',
+            labelStyle: TextStyle(color:set.fontColor),
           ),
           validator: (String value) {
             if(value.isEmpty) return '終了時間が未選択です';
@@ -393,43 +441,21 @@ class RecruitmentPageState extends State<RecruitmentPage> {
   Widget _remarksField(){
     return new Container(
         child: new TextFormField(
+            style:TextStyle(color:Colors.white),
             decoration: InputDecoration(
-              icon: Icon(Icons.note),
+              icon: Icon(
+                  Icons.note,
+                  color:set.fontColor,
+              ),
+              enabledBorder:UnderlineInputBorder(borderRadius:BorderRadius.circular(1.0),borderSide: BorderSide(color:set.fontColor, width: 3.0)),
               hintText: 'add remarks',
               labelText: '備考',
+              labelStyle: TextStyle(color:set.fontColor),
             ),
             onSaved: (String value){
               _remarks = value;
             }
         )
-    );
-  }
-}
-
-class SampleTabItem extends StatelessWidget {
-  final String title;
-  final Color color;
-
-  const SampleTabItem(this.title, this.color) : super();
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: this.color,
-      body: new Container(
-        child: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text(this.title,
-                  style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 36.0,
-                      fontWeight: FontWeight.bold))
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -3,6 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+/*----------------------------------------------
+
+イベント管理用クラス
+
+----------------------------------------------*/
 class EventCorrectionPage extends StatefulWidget {
   Event event;
   EventCorrectionPage(this.event);
