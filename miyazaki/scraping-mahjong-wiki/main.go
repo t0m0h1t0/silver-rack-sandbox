@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/PuerkitoBio/goquery"
+  "github.com/PuerkitoBio/goquery"
   "encoding/json"
   "fmt"
   "os"
@@ -36,13 +36,13 @@ type MahjongHands struct {
 }
 
 func fetchWiki() MahjongHands{
-	resp := MahjongHands {
+  resp := MahjongHands {
     Hands: []MahjongHand{},
   }
-	doc, err := goquery.NewDocument(URL)
-	if err != nil {
-		panic(err)
-	}
+  doc, err := goquery.NewDocument(URL)
+  if err != nil {
+    panic(err)
+  }
 
   selection := doc.Find("table.wikitable")
   selection.Each(func(index int, s *goquery.Selection) {
@@ -99,7 +99,7 @@ func writeJson(src MahjongHands) {
 }
 
 func writeFile(fileName string, bytes []byte) {
-    ioutil.WriteFile(fileName, bytes, os.ModePerm)
+  ioutil.WriteFile(fileName, bytes, os.ModePerm)
 }
 
 func handler() {
