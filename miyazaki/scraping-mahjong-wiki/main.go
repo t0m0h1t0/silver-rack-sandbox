@@ -50,7 +50,7 @@ func fetchWiki() MahjongHands{
     if !ok {
       return
     }
-    tr := s.Find("tr")
+    tr := s.Find("tr").Next()
     for i := 0; i < len(tr.Nodes); i++ {
       td := tr.Find("td")
       name := extractStrElement(td)
