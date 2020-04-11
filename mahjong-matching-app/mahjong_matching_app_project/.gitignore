@@ -16,6 +16,7 @@ android
 .gradle
 ios
 todo.md
+DB.txt
 
 # IntelliJ related
 *.iml

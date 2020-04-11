@@ -31,13 +31,17 @@ class EventRepository {
       //駅の所在する都道府県検索
       String prefName = await getPrefName(stationCode);
       event.pref = prefName;
-      _eventReference.child(prefName).child(event.station).child(event.eventId).set(event.toJson());
+      _eventReference
+          .child(prefName)
+          .child("${event.station}/${event.eventId}")
+          .set(event.toJson());
     } catch (e, stackTrace) {
       print(e);
       print(stackTrace);
     }
   }
 
+  //イベント修正
   Future<void> modifyEvent(String stationCode, EventDetail event) async {
     try {
       String prefName = await getPrefName(stationCode);
@@ -50,7 +54,7 @@ class EventRepository {
   }
 
   //駅の所在都道府県を取得
-  Future<String> getPrefName(String stationCode) async {
+  getPrefName(String stationCode) async {
     try {
       var url =
           "http://api.ekispert.jp/v1/json/station/light?code=$stationCode&gcs=tokyo&key=$apiKey";
@@ -65,7 +69,8 @@ class EventRepository {
     }
   }
 
-  //期限切れイベント削除用メソッド
+  //期限切れイベント削除
+  /*
   Future<void> _delete() async {
     try {
       DateTime now = DateTime.now();
@@ -87,9 +92,10 @@ class EventRepository {
       print(stackTrace);
     }
   }
+  */
 
   //イベント検索メソッド
-  Future<List<EventDetail>> searchEvent(EventSearch e) async {
+  searchEvent(EventSearch e) async {
     List<EventDetail> eventList = List();
     try {
       if (e.pref != null && e.line == null && e.station == null) {
@@ -134,7 +140,7 @@ class EventRepository {
   }
 
   //路線Picker作成
-  Future<Map<String, String>> createLineMap(String prefCode) async {
+  createLineMap(String prefCode) async {
     try {
       //APIコール
       var url = "http://api.ekispert.jp/v1/json/operationLine?prefectureCode=" +
@@ -177,8 +183,7 @@ class EventRepository {
     }
   }
 
-  void addUsersEvent(String eventId) {}
-  //ログ出力用メソッド
+  //ログ出力用
   void printMap(String actionName, Map map) {
     print("\n-----------$actionName Data-----------\n"
             "eventId: ${map["eventId"].toString()}\n" +

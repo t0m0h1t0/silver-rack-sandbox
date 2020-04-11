@@ -1,39 +1,36 @@
-import 'package:firebase_database/firebase_database.dart';
-
 /*----------------------------------------------
 
 トークルームEntityクラス
 
 ----------------------------------------------*/
-class TalkRoom {
-  String _roomId;
-  Map<String, String> _members;
-  String _userName;
-  int _noRead = 0;
+import 'package:firebase_database/firebase_database.dart';
 
-  TalkRoom.fromSnapShot(DataSnapshot snapshot)
-      : _roomId = snapshot.value["roomId"],
-        _userName = snapshot.value["userName"],
-        _noRead = snapshot.value["fromUserName"] {
-    snapshot.value["member"].forEach((key, value) {
-      _members[key] = value;
-    });
+class TalkRoom {
+  String _roomId; //ルームID
+  String _userId; //ユーザーID
+  Map<String, String> _members; //メンバー(ユーザーID,ユーザー名)
+  String _roomName; //ルーム名
+  int _noRead = 0; //未読
+
+  TalkRoom.fromSnapShot(DataSnapshot snapshot) {
+    _roomId = snapshot.key;
+    _userId = snapshot.value["userId"];
+    _noRead = snapshot.value["nonRead"];
+    _roomName = snapshot.value["userName"];
   }
 
   toJson() {
     return {
       "roomId": _roomId,
       "userId": _members,
-      "userName": _userName,
+      "roomName": _roomName,
       "noRead": _noRead,
     };
   }
 
   int get noRead => _noRead;
-
-  String get userName => _userName;
-
+  String get userName => _roomName;
   String get roomId => _roomId;
-
+  String get userId => _userId;
   Map<String, String> get members => _members;
 }
