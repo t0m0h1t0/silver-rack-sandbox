@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
           "name": "テストユーザ",
           "age": "25",
           "sex": "男性",
-          "rank": "5",
+          "rank": "1",
         });
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
         return;
       case 2:
         User user = User.tmpUser(AuthStatus.signedUp, "test");
-        user.name = "テストユーザ";
+        user.setName = "テストユーザ";
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             settings: const RouteSettings(name: "/AccountRegister"),

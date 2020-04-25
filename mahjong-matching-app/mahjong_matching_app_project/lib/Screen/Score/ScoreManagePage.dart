@@ -37,8 +37,6 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
   DateTime _selectedDay = DateTime.now();
   ScoreAnalyze analyze;
   var formatter = DateFormat(DateFormat.YEAR_MONTH_WEEKDAY_DAY);
-  int _max = -1000;
-  int _min = 1000;
   int grid = 50;
   List<FlSpot> _lineData;
 //  final _selectedDay =
@@ -47,14 +45,7 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
   bool showAvg = false;
   List<Color> gradientColors;
 
-  List<Tab> tabs = <Tab>[
-    Tab(
-      text: '月別',
-    ),
-    Tab(
-      text: "総合",
-    ),
-  ];
+  List<Tab> tabs = <Tab>[Tab(text: '月別'), Tab(text: "総合")];
 
   @override
   void initState() {
@@ -77,8 +68,8 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
     setState(() {
       _events = map;
       _selectedEvents = _events[_selectedDay] ?? [];
-      dataCleansing();
       if (map.isNotEmpty) analyze = ScoreAnalyze.fromMap(map);
+      dataCleansing();
     });
   }
 
@@ -89,20 +80,14 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
         gradient: LinearGradient(colors: [_parts.startGradient, _parts.endGradient]),
         title: Text('スコア管理', style: TextStyle(color: _parts.pointColor)),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              _showModalBottomSheet();
-            },
-          )
+          IconButton(icon: Icon(Icons.menu), onPressed: () => _showModalBottomSheet())
         ],
         bottom: TabBar(
-          //isScrollable: true,
-          tabs: tabs,
-          controller: _tabController,
-          unselectedLabelColor: Colors.grey,
-          labelColor: _parts.pointColor,
-        ),
+            //isScrollable: true,
+            tabs: tabs,
+            controller: _tabController,
+            unselectedLabelColor: Colors.grey,
+            labelColor: _parts.pointColor),
       ),
       backgroundColor: _parts.backGroundColor,
       body: TabBarView(controller: _tabController, children: <Widget>[
@@ -116,12 +101,12 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
         },
       ),
       bottomSheet: SolidBottomSheet(
-        canUserSwipe: true,
-        draggableBody: true,
-        controller: _solidController,
-        maxHeight: 500,
-        body: ScoreInputScreen(),
-      ),
+          headerBar: Container(),
+          canUserSwipe: true,
+          draggableBody: true,
+          controller: _solidController,
+          maxHeight: 500,
+          body: ScoreInputScreen()),
     );
   }
 
@@ -151,24 +136,22 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
               children: <Widget>[
                 Text("総得点の推移", style: textStyle),
                 totalLineGraph(),
-                Container(
-                  decoration: BoxDecoration(
-                    border: new Border.all(color: _parts.fontColor),
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      rankPercentage(),
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: new Border.all(color: _parts.fontColor),
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  child: aboutRankingRate(),
-                ),
+                rankPercentage(),
+                aboutRankingRate()
+//                Container(
+//                  decoration: BoxDecoration(
+//                    border: new Border.all(color: _parts.fontColor),
+//                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//                  ),
+//                  child: Column(children: <Widget>[rankPercentage()]),
+//                ),
+//                Container(
+//                  decoration: BoxDecoration(
+//                    border: new Border.all(color: _parts.fontColor),
+//                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//                  ),
+//                  child: aboutRankingRate(),
+//                ),
               ],
             ),
     );
@@ -186,10 +169,12 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
             markersColor: _parts.fontColor,
           ),
           onDaySelected: (date, events) {
-            setState(() {
-              _selectedEvents = events;
-              _selectedDay = date;
-            });
+            if (events.isNotEmpty) {
+              setState(() {
+                _selectedEvents = events;
+                _selectedDay = date;
+              });
+            }
           },
           builders: CalendarBuilders(
             markersBuilder: (context, date, events, holidays) {
@@ -197,10 +182,9 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
               if (events.isNotEmpty) {
                 children.add(
                   Positioned(
-                    right: 1,
-                    bottom: 1,
-                    child: _buildEventsMarker(date, events, _calendarController),
-                  ),
+                      right: 1,
+                      bottom: 1,
+                      child: _buildEventsMarker(date, events, _calendarController)),
                 );
               }
               return children;
@@ -237,20 +221,12 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
   Widget _buildEventsMarker(DateTime date, List events, CalendarController controller) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: Color(0xff7e57c2),
-      ),
+      decoration: BoxDecoration(shape: BoxShape.rectangle, color: Color(0xff7e57c2)),
       width: 16.0,
       height: 16.0,
       child: Center(
-        child: Text(
-          '${events.length}',
-          style: TextStyle().copyWith(
-            color: Colors.white,
-            fontSize: 12.0,
-          ),
-        ),
+        child: Text('${events.length}',
+            style: TextStyle().copyWith(color: Colors.white, fontSize: 12.0)),
       ),
     );
   }
@@ -263,12 +239,10 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
       value.forEach((element) {
         sum += element.total;
       });
-      _max = sum > _max ? sum : _max;
-      _min = sum < _min ? sum : _min;
       _lineData.add(FlSpot(i.toDouble(), sum.toDouble()));
       i++;
     });
-    grid = (_max - _min) ~/ 5;
+    grid = (analyze.maxPoint - analyze.minPoint) ~/ 5;
 
     return _lineData;
   }
@@ -280,10 +254,10 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
           aspectRatio: 1.70,
           child: Container(
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(18),
-                ),
-                color: Colors.white),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(18),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
               child: LineChart(
@@ -294,7 +268,7 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
                     drawVerticalLine: false,
                     drawHorizontalLine: true,
                     checkToShowHorizontalLine: (value) {
-                      return value == 0 || value == _min || value == _max;
+                      return value == 0 || value == analyze.minPoint || value == analyze.maxPoint;
                     },
                   ),
                   titlesData: FlTitlesData(
@@ -302,17 +276,12 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
                     leftTitles: SideTitles(
                       showTitles: true,
                       textStyle: TextStyle(
-                        color: const Color(0xff67727d),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
+                          color: const Color(0xff67727d),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
                       getTitles: (value) {
-                        if (value.toInt() == 0) {
-                          return '0';
-                        } else if (value == _max) {
-                          return '$_max';
-                        } else if (value == _min) {
-                          return '$_min';
+                        if (value == 0 || value == analyze.minPoint || value == analyze.maxPoint) {
+                          return value.toString();
                         } else {
                           return '';
                         }
@@ -323,8 +292,8 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
                   ),
                   borderData: FlBorderData(
                       show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
-                  maxY: _max.toDouble() + grid,
-                  minY: _min.toDouble() - grid,
+                  maxY: analyze.maxPoint + grid,
+                  minY: analyze.minPoint - grid,
                   minX: 0,
                   maxX: (_lineData.length + 1).toDouble(),
                   lineBarsData: [
@@ -334,13 +303,10 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
                       colors: gradientColors,
                       barWidth: 5,
                       isStrokeCapRound: true,
-                      dotData: const FlDotData(
-                        show: true,
-                      ),
+                      dotData: const FlDotData(show: true),
                       belowBarData: BarAreaData(
-                        show: true,
-                        colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
-                      ),
+                          show: true,
+                          colors: gradientColors.map((color) => color.withOpacity(0.3)).toList()),
                     ),
                   ],
                 ),
@@ -371,9 +337,7 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
   Widget rankPercentage() {
     return PieChart(
       PieChartData(
-          borderData: FlBorderData(
-            show: false,
-          ),
+          borderData: FlBorderData(show: false),
           sectionsSpace: 0,
           centerSpaceRadius: 30,
           startDegreeOffset: -90,
@@ -394,10 +358,7 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
             child: LinearPercentIndicator(
               width: 200,
               animation: true,
-              leading: Text(
-                "４着回避率：",
-                style: TextStyle(color: _parts.pointColor, fontSize: 15.0),
-              ),
+              leading: Text("４着回避率：", style: TextStyle(color: _parts.pointColor, fontSize: 15.0)),
               lineHeight: 20.0,
               animationDuration: 2000,
               percent: avoidFourthPercent,
@@ -411,10 +372,7 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
             child: LinearPercentIndicator(
               width: 200,
               animation: true,
-              leading: Text(
-                "連対率　　：",
-                style: TextStyle(color: _parts.pointColor, fontSize: 15.0),
-              ),
+              leading: Text("連対率　　：", style: TextStyle(color: _parts.pointColor, fontSize: 15.0)),
               lineHeight: 20.0,
               animationDuration: 2000,
               percent: associationPercent,
@@ -432,6 +390,8 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
     return List.generate(4, (i) {
       final double fontSize = 16;
       final double radius = 50;
+      final TextStyle _label =
+          TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: _parts.pointColor);
       double rate;
 
       switch (i) {
@@ -440,40 +400,36 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
           return PieChartSectionData(
             color: Color(0xff6200ea),
             value: rate,
-            title: '1着',
+            title: rate != 0 ? '1着' : '',
             radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: _parts.pointColor),
+            titleStyle: _label,
           );
         case 1:
           rate = analyze.rankingList[1] * 100 / analyze.games * 10.roundToDouble() / 10;
           return PieChartSectionData(
             color: Color(0xff651fff),
             value: rate,
-            title: '2着',
+            title: rate != 0 ? '2着' : '',
             radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: _parts.pointColor),
+            titleStyle: _label,
           );
         case 2:
           rate = analyze.rankingList[2] * 100 / analyze.games * 10.roundToDouble() / 10;
           return PieChartSectionData(
             color: Color(0xff7c4dff),
             value: rate,
-            title: '3着',
+            title: rate != 0 ? '3着' : '',
             radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: _parts.pointColor),
+            titleStyle: _label,
           );
         case 3:
           rate = analyze.rankingList[3] * 100 / analyze.games * 10.roundToDouble() / 10;
           return PieChartSectionData(
             color: Color(0xffb388ff),
             value: rate,
-            title: '4着',
+            title: rate != 0 ? '4着' : '',
             radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: _parts.pointColor),
+            titleStyle: _label,
           );
         default:
           return null;
@@ -506,6 +462,6 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
   @override
   void dispose() {
     super.dispose();
-    if (_calendarController != null) _calendarController.dispose();
+    _calendarController?.dispose();
   }
 }

@@ -18,47 +18,46 @@ class TalkBloc {
   Stream<List<Talk>> get messageListStream => _messageListController.stream;
   //List<String> messageList = new List();
 
-  //メッセージ送信用Stream
-  final _sendMessageController = StreamController<Talk>();
-  Sink<Talk> get sendMessageSink => _sendMessageController.sink;
-
   //roomIdを流すStream
   final _roomIdController = BehaviorSubject<String>.seeded(null);
   Stream<String> get roomIdStream => _roomIdController.stream;
 
-  //roomIDのget通知を受け取るstream
-  final _prepareRoomController = StreamController<String>();
-  Sink<String> get prepareRoom => _prepareRoomController.sink;
-
   //リンクからの遷移
   TalkBloc.newRoom(User user, String toUserId, String toUserName) {
     this.repository = TalkRepository.forNewRoom(user, toUserId, toUserName);
-    String roomId;
-    _prepareRoomController.stream.listen((event) async {
-      roomId = await repository.prepareRoomId();
-      if (roomId != null) _roomIdController.sink.add(roomId);
-    });
   }
 
   //履歴からの遷移
   TalkBloc(this.roomId) {
     this.repository = TalkRepository(roomId);
     //メッセージリアルタイム更新
-    repository.realtimeMessageStream.listen((message) {
-      _messageListController.add(message);
-    });
+    try {
+      repository.realtimeMessageStream.listen((message) {
+        _messageListController.add(message);
+      });
+    } catch (e) {
+      _messageListController.addError(e);
+    }
+  }
 
-    //メッセージ送信
-    _sendMessageController.stream.listen((talk) async {
-      print("repository:sended");
+  callSendMessage(Talk talk) {
+    //@Todo error処理
+    try {
       repository.sendMessage(this.roomId, talk);
-    });
+    } catch (e) {}
+  }
+
+  callPrepareRoom() async {
+    try {
+      String roomId = await repository.prepareRoomId();
+      if (roomId != null) _roomIdController.sink.add(roomId);
+    } catch (e) {
+      _roomIdController.sink.addError(e);
+    }
   }
 
   void dispose() {
-    _sendMessageController?.close();
     _messageListController?.close();
     _roomIdController?.close();
-    _prepareRoomController?.close();
   }
 }

@@ -18,6 +18,7 @@ class SettingScreen extends StatelessWidget {
   final PageParts _parts = PageParts();
   final User user;
   SettingScreen({Key key, this.user});
+
   // 画面全体のビルド
   @override
   Widget build(BuildContext context) {
@@ -25,22 +26,24 @@ class SettingScreen extends StatelessWidget {
       appBar: _parts.appBar(title: "設定"),
       backgroundColor: _parts.backGroundColor,
       body: Container(
+        //padding: const EdgeInsets.symmetric(vertical: 40.0),
         child: ListView(children: <Widget>[
+          Divider(color: _parts.pointColor, height: 4.0),
           _listElement(
             title: "プロフィールを見る",
             onTap: () {
               Navigator.of(context).push<Widget>(
                 MaterialPageRoute(
-                  settings: const RouteSettings(name: "/Profile"),
-                  builder: (context) => new ProfileScreen(user: user),
-                ),
+                    settings: const RouteSettings(name: "/Profile"),
+                    builder: (context) =>
+                        new ProfileScreen(user: user, userId: user.userId, userName: user.name)),
               );
             },
           ),
           _listElement(
             title: "ログアウト",
             onTap: () {
-              showDialog<bool>(
+              showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return new AlertDialog(
@@ -48,9 +51,7 @@ class SettingScreen extends StatelessWidget {
                     actions: <Widget>[
                       new FlatButton(
                         child: const Text('No'),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
+                        onPressed: () => Navigator.of(context).pop(false),
                       ),
                       new FlatButton(
                         child: const Text('Yes'),
@@ -96,16 +97,10 @@ class SettingScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-            title: Text(
-              title,
-              style: TextStyle(color: _parts.pointColor),
-            ),
+            title: Text(title, style: TextStyle(color: _parts.pointColor)),
             trailing: Icon(Icons.arrow_forward, color: _parts.pointColor),
             onTap: onTap),
-        Divider(
-          color: _parts.pointColor,
-          height: 4.0,
-        ),
+        Divider(color: _parts.pointColor, height: 4.0),
       ],
     );
   }

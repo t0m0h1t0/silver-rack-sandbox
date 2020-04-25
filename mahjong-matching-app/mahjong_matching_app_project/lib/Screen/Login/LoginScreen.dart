@@ -42,6 +42,7 @@ class LoginScreenState extends State<LoginScreen> {
   final PageParts _parts = PageParts();
   final LoginBloc loginBloc = LoginBloc();
 
+  ///@Todo 一部StreamをSplashに移行、snapshotの分岐
   @override
   void initState() {
     super.initState();
@@ -99,16 +100,11 @@ class LoginScreenState extends State<LoginScreen> {
                     text: "Login with Google",
                     onPressed: () => loginBloc.googleLoginSink.add(null),
                   ),
-                  SignInButton(
-                    Buttons.Twitter,
-                    text: "Login with Twitter",
-                    onPressed: () => null,
-                  ),
-                  SignInButton(
-                    Buttons.Apple,
-                    text: "Login with Apple",
-                    onPressed: () => null,
-                  ),
+                  SignInButton(Buttons.Twitter, text: "Login with Twitter", onPressed: () => null),
+                  SignInButton(Buttons.Apple,
+                      text: "Login"
+                          " with Apple",
+                      onPressed: () => null),
                 ],
               );
             }
@@ -121,7 +117,6 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     super.dispose();
-    loginBloc.dispose();
-    print("dispose login Bloc");
+    loginBloc?.dispose();
   }
 }
