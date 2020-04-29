@@ -1,4 +1,4 @@
-package com.example.flutter_app2
+package com.silver_rack.jongmatch
 
 import io.flutter.embedding.android.FlutterActivity
 
