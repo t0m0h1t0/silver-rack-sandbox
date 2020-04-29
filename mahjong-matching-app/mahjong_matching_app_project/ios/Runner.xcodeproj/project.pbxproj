@@ -112,7 +112,6 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				B623F739245988E40058B90B /* prd.xcconfig */,
-				B623F73D24598E040058B90B /* GoogleService-Info-dev.plist */,
 				B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */,
 				B623F737245988D70058B90B /* dev.xcconfig */,
 				B623F72B245988860058B90B /* qas.xcconfig */,
@@ -334,7 +333,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		B623F74124598EC60058B90B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
