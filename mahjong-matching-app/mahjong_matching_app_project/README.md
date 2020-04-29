@@ -113,12 +113,12 @@ samples, guidance on mobile development, and a full API reference.
         ```
     8. deploy
         ```
-        $ ./deploy.sh ${BUILD_TYPE} ${ENV}
+        $ ./deploy_android.sh ${BUILD_TYPE} ${ENV}
         ```
 
         For example, if you execute bellow command,
             ```
-            $ ./deploy.sh debug dev
+            $ ./deploy_android.sh debug dev
             ```
 
         you can deploy mahjong matching app to dev staging using debug mode.
