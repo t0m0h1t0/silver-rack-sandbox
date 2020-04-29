@@ -87,5 +87,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.firebase:firebase-core:9.6.1'
 }
 
+// fileの末尾である必要がある
+apply plugin: 'com.google.gms.google-services'
