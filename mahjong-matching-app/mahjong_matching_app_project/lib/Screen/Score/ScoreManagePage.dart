@@ -233,14 +233,14 @@ class ScoreManageScreenState extends State<ScoreManageScreen> with TickerProvide
 
   List<FlSpot> dataCleansing() {
     _lineData = [];
-    int i = 1;
+    int yAxis = 1;
     int sum = 0;
     _events.forEach((key, value) {
       value.forEach((element) {
         sum += element.total;
       });
-      _lineData.add(FlSpot(i.toDouble(), sum.toDouble()));
-      i++;
+      _lineData.add(FlSpot(yAxis.toDouble(), sum.toDouble()));
+      yAxis++;
     });
     grid = (analyze.maxPoint - analyze.minPoint) ~/ 5;
 
