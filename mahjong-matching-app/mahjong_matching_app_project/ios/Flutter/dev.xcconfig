@@ -1,4 +1,5 @@
-include "Generated.xcconfig"
-
+FLUTTER_FLAVOR=dev
+PRODUCT_BUNDLE_IDENTIFIER=com.silver-rack.jongmatch.dev
+DISPLAY_NAME=Runner Dev
 FLUTTER_TARGET=lib/main.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.example.flutterApp20200429.dev
+CFBUNDLE_URL_SCHEMES=com.googleusercontent.apps.776612992852-0kh675dks5ggmtvflte1duricjocn3sc

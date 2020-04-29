@@ -1,4 +1,5 @@
-include "Generated.xcconfig"
-
+FLUTTER_FLAVOR=qas
+PRODUCT_BUNDLE_IDENTIFIER=com.silver-rack.jongmatch.qas
+DISPLAY_NAME=Runner Qas
 FLUTTER_TARGET=lib/main.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.example.flutterApp20200429.qas
+REVERSED_CLIENT_ID=com.googleusercontent.apps.776612992852-1bgl8p09gittcakmfvekvisfs2idmola

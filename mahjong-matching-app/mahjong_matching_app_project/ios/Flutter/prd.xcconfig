@@ -1,4 +1,5 @@
-include "Generated.xcconfig"
-
+FLUTTER_FLAVOR=prd
+PRODUCT_BUNDLE_IDENTIFIER=com.silver-rack.jongmatch.prd
+DISPLAY_NAME=Runner Prd
 FLUTTER_TARGET=lib/main.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.example.flutterApp20200429.prd
+
