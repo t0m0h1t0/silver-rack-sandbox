@@ -69,6 +69,67 @@ samples, guidance on mobile development, and a full API reference.
     $ flutter run
     ```
 
+### android
+0. you should fork this repository
+
+1. clone
+    ```
+    $ git clone git@github.com:{your_account_name}/silver-rack-sandbox.git
+    or
+    $ git clone https://github.com/{your_accout_name}/silver-rack-sandbox.git
+    ```
+
+2. change directory
+    ```
+    $ cd silver-rack-sandbox/mahjong-matching-app/mahjong_matching_app_project
+      ```
+
+3. download and set `google-services.json` to use firebase
+    0. you should choose ENV(dev/qas/prd) you want to set.
+    1. access firebase https://firebase.google.com/
+    2. login using account of silver-rack and choose firebase project
+        - Notice: firebase projects are divided due to staging
+        - ex.) If ENV is dev, you should choose `mahjong-app-dev`
+    3. open Settings of app named `mahjong matching app` in project you choose.
+    4. download `google-services.json`
+    5. move `google-services.json` to `android/app/src/{ENV}`
+    6. place keystore in android/keystore
+    7. place config files in android/app/signingConfigs
+        - NOTICE: Not released on github due to confidential information
+        ```
+        android
+        ├── app
+        │   ├── signingConfigs
+        │   │   ├── develop.gradle
+        │   │   └── release.gradle
+        │   └── src
+        │       ├── dev
+        │       │   └── google-services.json
+        │       └── qas
+        │           └── google-services.json
+        └── keystore
+             ├── debug.keystore
+             └── release.keystore
+        ```
+    8. deploy
+        ```
+        $ ./deploy.sh ${BUILD_TYPE} ${ENV}
+        ```
+
+        For example, if you execute bellow command,
+            ```
+            $ ./deploy.sh debug dev
+            ```
+
+        you can deploy mahjong matching app to dev staging using debug mode.
+
+        (default value of BUILD_TYPE and ENV are "debug" and "dev", respectively.)
+
+    9. execute
+        ```
+        $ flutter run --flavor {ENV}
+        ```
+
 ### Correspondence table of BUILD_TYPE and ENV
 | BUILD_TYPE | ENV | Prepared |
 | --- | --- | --- |
