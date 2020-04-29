@@ -112,6 +112,7 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				B623F739245988E40058B90B /* prd.xcconfig */,
+				B623F73D24598E040058B90B /* GoogleService-Info-dev.plist */,
 				B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */,
 				B623F737245988D70058B90B /* dev.xcconfig */,
 				B623F72B245988860058B90B /* qas.xcconfig */,
@@ -183,6 +184,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				0EAD80BF5657FD0D25801AE6 /* [CP] Embed Pods Frameworks */,
 				87D6BD604DE8A05BDE2E781A /* [CP] Copy Pods Resources */,
+				B623F74124598EC60058B90B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -231,6 +233,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B623F73C24598A5F0058B90B /* Debug-dev.xcconfig in Resources */,
+				B623F73E24598E040058B90B /* GoogleService-Info-dev.plist in Resources */,
+				B623F736245988920058B90B /* Release-dev.xcconfig in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				B623F72F245988860058B90B /* Release-qas.xcconfig in Resources */,
 				B623F732245988860058B90B /* qas.xcconfig in Resources */,
@@ -240,6 +245,7 @@
 				B623F72E245988860058B90B /* Release-prd.xcconfig in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				B623F734245988870058B90B /* Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +336,23 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
+		B623F74124598EC60058B90B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\necho \"-----${CONFIGURATION}-----\"\necho \"-----${SRCROOT}-----\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]  || [ \"${CONFIGURATION}\" = \"Debug-dev\" ] || [ \"${CONFIGURATION}\" = \"Release-dev\" ]; then\n  cp \"$SRCROOT/Runner/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n  echo \"Development GoogleService-Info copied.\"\nelif [ \"${CONFIGURATION}\" = \"Release\" ] || [ \"${CONFIGURATION}\" = \"Debug-qas\" ] || [ \"${CONFIGURATION}\" = \"Release-qas\" ]; then\n  cp \"$SRCROOT/Runner/GoogleService-Info-qas.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n  echo \"Integration Test GoogleService-Info copied.\"\nelif [ \"${CONFIGURATION}\" = \"Release-prd\" ]  || [ \"${CONFIGURATION}\" = \"Debug-prd\" ]; then\n  cp \"$SRCROOT/Runner/GoogleService-Info-prd.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n  echo \"Production GoogleService-Info copied.\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -366,7 +389,7 @@
 /* Begin XCBuildConfiguration section */
 		97C147031CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -422,7 +445,7 @@
 		};
 		97C147041CF9000F007C117D /* Release-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F735245988920058B90B /* Release-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -475,7 +498,7 @@
 		};
 		97C147061CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -509,7 +532,7 @@
 		};
 		97C147071CF9000F007C117D /* Release-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F735245988920058B90B /* Release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -542,7 +565,7 @@
 		};
 		B623F71B24594DB90058B90B /* Debug-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -598,7 +621,7 @@
 		};
 		B623F71C24594DB90058B90B /* Debug-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = B623F73B24598A5F0058B90B /* Debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -632,7 +655,7 @@
 		};
 		B623F71D24594DC60058B90B /* Release-qas */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F728245988860058B90B /* Release-qas.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -685,7 +708,7 @@
 		};
 		B623F71E24594DC60058B90B /* Release-qas */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F728245988860058B90B /* Release-qas.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -718,7 +741,7 @@
 		};
 		B623F71F24594DD40058B90B /* Release-prd */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F727245988860058B90B /* Release-prd.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -771,7 +794,7 @@
 		};
 		B623F72024594DD40058B90B /* Release-prd */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = B623F727245988860058B90B /* Release-prd.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
