@@ -33,6 +33,7 @@ samples, guidance on mobile development, and a full API reference.
       ```
 
 3. download and set `GoogleServiceInfo.plist` to use firebase
+
     0. you should choose ENV(dev/qas/prd) you want to set.
     1. access firebase https://firebase.google.com/
     2. login using account of silver-rack and choose firebase project
@@ -49,12 +50,12 @@ samples, guidance on mobile development, and a full API reference.
 
 4. deploy
     ```
-    $ ./deploy.sh ${BUILD_TYPE} ${ENV}
+    $ ./deploy_ios.sh ${BUILD_TYPE} ${ENV}
     ```
 
     For example, if you execute bellow command,
         ```
-        $ ./deploy.sh debug dev
+        $ ./deploy_ios.sh debug dev
         ```
 
     you can deploy mahjong matching app to dev staging using debug mode.
