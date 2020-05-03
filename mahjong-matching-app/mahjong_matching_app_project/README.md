@@ -126,6 +126,8 @@ samples, guidance on mobile development, and a full API reference.
         (default value of BUILD_TYPE and ENV are "debug" and "dev", respectively.)
 
     9. execute
+
+        Notice: It is necessary to start up the simulator or real anroid device.
         ```
         $ flutter run --flavor {ENV}
         ```
