@@ -63,6 +63,8 @@ samples, guidance on mobile development, and a full API reference.
     (default value of BUILD_TYPE and ENV are "debug" and "dev", respectively.)
 
 5. execute
+
+    Notice: It is necessary to start up the simulator or real iOS device.
     ```
     $ flutter run
     ```
