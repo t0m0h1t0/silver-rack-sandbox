@@ -36,20 +36,47 @@ android {
         disable 'InvalidPackage'
     }
 
+    Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    apply from: 'signingConfigs/release.gradle', to: android
+    apply from :'signingConfigs/develop.gradle', to: android
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.flutter_app2"
-        minSdkVersion 16
-        targetSdkVersion 28
+        applicationId "com.silver_rack.jongmatch"
+        minSdkVersion 21
+        targetSdkVersion 26
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        signingConfig signingConfigs.develop
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            debuggable false
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            versionNameSuffix ".dev"
+        }
+        qas {
+            dimension "default"
+            applicationIdSuffix ".qas"
+            versionNameSuffix ".qas"
+        }
+        prd {
+            dimension "default"
         }
     }
 }
@@ -60,4 +87,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.firebase:firebase-core:9.6.1'
 }
+
+// fileの末尾である必要がある
+apply plugin: 'com.google.gms.google-services'
