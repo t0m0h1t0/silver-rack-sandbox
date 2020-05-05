@@ -1,0 +1,5 @@
+FLUTTER_FLAVOR=prd
+PRODUCT_BUNDLE_IDENTIFIER=com.silver-rack.jongmatch.prd
+DISPLAY_NAME=Runner Prd
+FLUTTER_TARGET=lib/main.dart
+

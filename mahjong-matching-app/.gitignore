@@ -9,6 +9,11 @@
 .buildlog/
 .history
 .svn/
+.last_build_id
+
+GoogleService-Info.plist
+GoogleService-Info-dev.plist
+GoogleService-Info-qas.plist
 
 # IntelliJ related
 *.iml
